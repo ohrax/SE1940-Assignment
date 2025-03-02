@@ -30,6 +30,7 @@ public class AbsentRequestDAO extends DBContext<AbsentRequest> {
                         rs.getInt("createdBy"),
                         rs.getString("status"),
                         rs.getInt("processedBy"),
+                        rs.getString("reason"),
                         rs.getTimestamp("createdDate").toLocalDateTime(),
                         rs.getTimestamp("updatedDate").toLocalDateTime()
                 );
@@ -40,7 +41,7 @@ public class AbsentRequestDAO extends DBContext<AbsentRequest> {
         }
         return requests;
     }
-    
+
     public ArrayList<AbsentRequest> getListRequestsByUser(int userId) {
         ArrayList<AbsentRequest> requests = new ArrayList<>();
         try {
@@ -50,15 +51,16 @@ public class AbsentRequestDAO extends DBContext<AbsentRequest> {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 AbsentRequest request = new AbsentRequest(
-                    rs.getInt("requestId"),
-                    rs.getString("title"),
-                    rs.getTimestamp("fromDate").toLocalDateTime(),
-                    rs.getTimestamp("toDate").toLocalDateTime(),
-                    rs.getInt("createdBy"),
-                    rs.getString("status"),
-                    rs.getInt("processedBy"),
-                    rs.getTimestamp("createdDate").toLocalDateTime(),
-                    rs.getTimestamp("updatedDate").toLocalDateTime()
+                        rs.getInt("requestId"),
+                        rs.getString("title"),
+                        rs.getTimestamp("fromDate").toLocalDateTime(),
+                        rs.getTimestamp("toDate").toLocalDateTime(),
+                        rs.getInt("createdBy"),
+                        rs.getString("status"),
+                        rs.getInt("processedBy"),
+                        rs.getString("reason"),
+                        rs.getTimestamp("createdDate").toLocalDateTime(),
+                        rs.getTimestamp("updatedDate").toLocalDateTime()
                 );
                 requests.add(request);
             }
@@ -84,6 +86,7 @@ public class AbsentRequestDAO extends DBContext<AbsentRequest> {
                         rs.getInt("createdBy"),
                         rs.getString("status"),
                         rs.getInt("processedBy"),
+                        rs.getString("reason"),
                         rs.getTimestamp("createdDate").toLocalDateTime(),
                         rs.getTimestamp("updatedDate").toLocalDateTime()
                 );

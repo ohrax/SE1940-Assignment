@@ -16,12 +16,11 @@ import model.User;
 
 @WebServlet(name = "LoginController", urlPatterns = {"/login"})
 public class LoginController extends HttpServlet {
-
     private final UserDAO userDAO = new UserDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
     }
 
     @Override
@@ -32,11 +31,11 @@ public class LoginController extends HttpServlet {
         User user = userDAO.getUserByUsernameAndPassword(username, password);
         if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            response.sendRedirect("/home");
+            session.setAttribute("loggedInUser", user);
+            response.sendRedirect(request.getContextPath() + "/home");
         } else {
             request.setAttribute("error", "Invalid username or password");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
         }
     }
 }

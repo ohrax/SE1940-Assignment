@@ -19,24 +19,32 @@ public class AbsentRequest {
     private int createdBy;
     private String status; //approve, in progress, reject
     private int processedBy;
+    private String reason;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
-    private enum statusEnum {
-        APPROVED, INPROGRESS, REJECTED
+    public enum StatusEnum {
+        APPROVED("Approved"), IN_PROGRESS("In Progress"), REJECTED("Rejected");
+        private final String value;
+        StatusEnum(String value) { this.value = value; }
+        public String getValue() { return value; }
     }
 
-    public AbsentRequest(int requestId, String title, LocalDateTime fromDate, LocalDateTime toDate, int createdBy, String status, int processedBy, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public AbsentRequest(int requestId, String title, LocalDateTime fromDate, LocalDateTime toDate, int createdBy, String status, int processedBy, String reason, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.requestId = requestId;
         this.title = title;
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.createdBy = createdBy;
         this.status = status;
+        setStatus(status);
         this.processedBy = processedBy;
+        this.reason = reason;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
     }
+
+    
 
     public AbsentRequest() {
     }
@@ -86,7 +94,11 @@ public class AbsentRequest {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        if ("Approved".equals(status) || "In Progress".equals(status) || "Rejected".equals(status)) {
+            this.status = status;
+        } else {
+            throw new IllegalArgumentException("Status must be 'Approved', 'In Progress', or 'Rejected'");
+        }
     }
 
     public int getProcessedBy() {
@@ -95,6 +107,14 @@ public class AbsentRequest {
 
     public void setProcessedBy(int processedBy) {
         this.processedBy = processedBy;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public LocalDateTime getCreatedDate() {

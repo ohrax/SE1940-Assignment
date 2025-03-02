@@ -52,6 +52,24 @@ public class UserDivisionDAO extends DBContext<UserDivision> {
         }
         return null;
     }
+    
+    public UserDivision getByUserId(int userId) {
+        try {
+            String sql = "SELECT * FROM UserDivision WHERE userId = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new UserDivision(
+                    rs.getInt("id"), rs.getInt("userId"),
+                    rs.getInt("divisionId"), rs.getString("position")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public void insert(UserDivision model) {

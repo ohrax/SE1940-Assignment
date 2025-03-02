@@ -15,8 +15,11 @@ public class UserDivision {
     private int divisionId;
     private String position; //DULead, TLead, Member
 
-    private enum positionEnum {
-        DULEAD, TLEAD, MEMBER
+    public enum PositionEnum {
+        DULEAD("DULead"), TLEAD("TLead"), MEMBER("Member");
+        private final String value;
+        PositionEnum(String value) { this.value = value; }
+        public String getValue() { return value; }
     }
 
     public UserDivision() {
@@ -58,7 +61,11 @@ public class UserDivision {
     }
 
     public void setPosition(String position) {
-        this.position = position;
+        if ("DULead".equals(position) || "TLead".equals(position) || "Member".equals(position)) {
+            this.position = position;
+        } else {
+            throw new IllegalArgumentException("Position must be 'DULead', 'TLead', or 'Member'");
+        }
     }
 
 }

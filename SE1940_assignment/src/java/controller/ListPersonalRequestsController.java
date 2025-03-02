@@ -5,26 +5,32 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import dao.AbsentRequestDAO;
 import model.AbsentRequest;
-import java.time.LocalDateTime;
-import java.util.List;
+import model.User;
 
 @WebServlet(name = "ListPersonalRequestsController", urlPatterns = {"/request/list/personal"})
 public class ListPersonalRequestsController extends HttpServlet {
-
     private final AbsentRequestDAO absentRequestDAO = new AbsentRequestDAO();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        List<AbsentRequest> requests = (List<AbsentRequest>) absentRequestDAO.get(userId);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        int userId = user.getUserId();
+        List<AbsentRequest> requests = absentRequestDAO.getListRequestsByUser(userId);
         request.setAttribute("requests", requests);
         request.getRequestDispatcher("/jsp/listPersonalRequests.jsp").forward(request, response);
     }

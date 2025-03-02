@@ -13,7 +13,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import dao.AbsentRequestDAO;
+import dao.UserDAO;
 import dao.UserRoleDAO;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import model.AbsentRequest;
 import model.User;
 import model.UserRole;
@@ -23,28 +26,35 @@ public class AgendaController extends HttpServlet {
 
     private final AbsentRequestDAO absentRequestDAO = new AbsentRequestDAO();
     private final UserRoleDAO userRoleDAO = new UserRoleDAO();
+    private final UserDAO userDAO = new UserDAO();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loggedInUser");
         
         if (user == null) {
-            response.sendRedirect("/login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         
         boolean isHigherUp = userRoleDAO.isUserHigherUp(user.getUserId());
         List<AbsentRequest> requests;
-        String viewType = request.getParameter("view");
-        if ("employee".equals(viewType) && isHigherUp) {
-            requests = absentRequestDAO.list();
+        
+        if (isHigherUp) {
+            List<User> teamMembers = userDAO.list().stream()
+                .filter(u -> u.getDirectManagerId() == user.getUserId())
+                .collect(Collectors.toList());
+            requests = new ArrayList<>();
+            for (User member : teamMembers) {
+                requests.addAll(absentRequestDAO.getListRequestsByUser(member.getUserId()));
+            }
         } else {
             requests = absentRequestDAO.getListRequestsByUser(user.getUserId());
         }
         
         request.setAttribute("requests", requests);
+        request.setAttribute("isHigherUp", isHigherUp);
         request.getRequestDispatcher("/jsp/agenda.jsp").forward(request, response);
     }
 }

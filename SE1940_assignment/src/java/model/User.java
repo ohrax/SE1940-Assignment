@@ -22,8 +22,11 @@ public class User {
     private LocalDateTime updatedDate;
     private int directManagerId;
 
-    private enum statusEnum {
-        active, inactive
+    public enum StatusEnum {
+        ACTIVE("Active"), INACTIVE("Inactive");
+        private final String value;
+        StatusEnum(String value) { this.value = value; }
+        public String getValue() { return value; }
     }
 
     public User() {
@@ -86,7 +89,11 @@ public class User {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        if ("Active".equals(status) || "Inactive".equals(status)) {
+            this.status = status;
+        } else {
+            throw new IllegalArgumentException("Status must be 'Active' or 'Inactive'");
+        }
     }
 
     public LocalDateTime getCreatedDate() {
