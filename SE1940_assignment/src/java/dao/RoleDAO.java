@@ -4,94 +4,27 @@
  */
 package dao;
 
-import java.sql.*;
-import java.util.ArrayList;
 import model.Role;
+import util.DBConnection;
 
-public class RoleDAO extends DBContext<Role> {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-    @Override
-    public ArrayList<Role> list() {
-        ArrayList<Role> roles = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM Role";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+public class RoleDAO {
+    public List<Role> getRolesByUserId(int userId) throws Exception {
+        List<Role> roles = new ArrayList<>();
+        String sql = "SELECT r.* FROM roles r JOIN user_roles ur ON r.role_id = ur.role_id WHERE ur.user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Role role = new Role(
-                        rs.getInt("roleId"),
-                        rs.getString("roleName"),
-                        rs.getTimestamp("createdDate").toLocalDateTime(),
-                        rs.getTimestamp("updatedDate").toLocalDateTime()
-                );
-                roles.add(role);
+                roles.add(new Role(rs.getInt("role_id"), rs.getString("role_name")));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return roles;
-    }
-
-    @Override
-    public Role get(int id) {
-        try {
-            String sql = "SELECT * FROM Role WHERE roleId = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Role(
-                        rs.getInt("roleId"),
-                        rs.getString("roleName"),
-                        rs.getTimestamp("createdDate").toLocalDateTime(),
-                        rs.getTimestamp("updatedDate").toLocalDateTime()
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public void insert(Role model) {
-        try {
-            String sql = "INSERT INTO Role (roleName, createdDate, updatedDate) VALUES (?, DEFAULT, DEFAULT)";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, model.getRoleName());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void update(Role model) {
-        try {
-            String sql = "UPDATE Role SET roleName = ?, updatedDate = GETDATE() WHERE roleId = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, model.getRoleName());
-            stmt.setInt(2, model.getRoleId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(Role model) {
-        try {
-            String sql = "DELETE FROM Role WHERE roleId = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, model.getRoleId());
-            stmt.executeUpdate();
-
-            String updateSql = "UPDATE Role SET updatedDate = GETDATE() WHERE roleId = ?";
-            PreparedStatement updateStmt = connection.prepareStatement(updateSql);
-            updateStmt.setInt(1, model.getRoleId());
-            updateStmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

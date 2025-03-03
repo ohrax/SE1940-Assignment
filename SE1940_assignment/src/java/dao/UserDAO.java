@@ -4,125 +4,31 @@
  */
 package dao;
 
-import java.sql.*;
-import java.util.ArrayList;
 import model.User;
+import util.DBConnection;
 
-public class UserDAO extends DBContext<User> {
-    @Override
-    public ArrayList<User> list() {
-        ArrayList<User> users = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM [User]";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                User user = new User(
-                    rs.getInt("userId"), rs.getString("username"),
-                    rs.getString("fullname"), rs.getString("email"),
-                    rs.getString("password"), rs.getString("status"),
-                    rs.getTimestamp("createdDate").toLocalDateTime(),
-                    rs.getTimestamp("updatedDate").toLocalDateTime(),
-                    rs.getInt("directManagerId")
-                );
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return users;
-    }
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-    @Override
-    public User get(int id) {
-        try {
-            String sql = "SELECT * FROM [User] WHERE userId = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+public class UserDAO {
+    public User getUserByUsernameAndPassword(String username, String password) throws Exception {
+        String sql = "SELECT u.*, r.role_name, d.division_name FROM users u " +
+                     "JOIN user_roles ur ON u.user_id = ur.user_id " +
+                     "JOIN roles r ON ur.role_id = r.role_id " +
+                     "JOIN divisions d ON u.division_id = d.division_id " +
+                     "WHERE u.username = ? AND u.password = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new User(
-                    rs.getInt("userId"), rs.getString("username"),
-                    rs.getString("fullname"), rs.getString("email"),
-                    rs.getString("password"), rs.getString("status"),
-                    rs.getTimestamp("createdDate").toLocalDateTime(),
-                    rs.getTimestamp("updatedDate").toLocalDateTime(),
-                    rs.getInt("directManagerId")
-                );
+                return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
+                                rs.getInt("division_id"), rs.getInt("manager_id") == 0 ? 0 : rs.getInt("manager_id"), 
+                                rs.getString("role_name"), rs.getString("division_name"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
-    }
-
-    public User getUserByUsernameAndPassword(String username, String password) {
-        try {
-            String sql = "SELECT * FROM [User] WHERE username = ? AND password = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new User(
-                    rs.getInt("userId"), rs.getString("username"),
-                    rs.getString("fullname"), rs.getString("email"),
-                    rs.getString("password"), rs.getString("status"),
-                    rs.getTimestamp("createdDate").toLocalDateTime(),
-                    rs.getTimestamp("updatedDate").toLocalDateTime(),
-                    rs.getInt("directManagerId")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public void insert(User model) {
-        try {
-            String sql = "INSERT INTO [User] (username, fullname, email, password, status, createdDate, updatedDate, directManagerId) VALUES (?, ?, ?, ?, ?, DEFAULT, DEFAULT, ?)";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, model.getUsername());
-            stmt.setString(2, model.getFullname());
-            stmt.setString(3, model.getEmail());
-            stmt.setString(4, model.getPassword());
-            stmt.setString(5, model.getStatus());
-            stmt.setInt(6, model.getDirectManagerId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void update(User model) {
-        try {
-            String sql = "UPDATE [User] SET username = ?, fullname = ?, email = ?, password = ?, status = ?, updatedDate = GETDATE(), directManagerId = ? WHERE userId = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, model.getUsername());
-            stmt.setString(2, model.getFullname());
-            stmt.setString(3, model.getEmail());
-            stmt.setString(4, model.getPassword());
-            stmt.setString(5, model.getStatus());
-            stmt.setInt(6, model.getDirectManagerId());
-            stmt.setInt(7, model.getUserId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(User model) {
-        try {
-            String sql = "DELETE FROM [User] WHERE userId = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, model.getUserId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

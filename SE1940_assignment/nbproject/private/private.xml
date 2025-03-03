@@ -3,7 +3,30 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/controller/LoginController.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/web/request_create.jsp</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/controller/ReviewServlet.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/web/login.jsp</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/web/request_review.jsp</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/controller/LoginServlet.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/controller/AgendaServlet.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/controller/HomeServlet.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/model/User.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/util/DBConnection.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/model/Division.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/nbproject/build-impl.xml</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/model/Role.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/dao/LeaveRequestDAO.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/model/LeaveRequest.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/web/index.html</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/web/agenda.jsp</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/controller/RequestServlet.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/web/request_list.jsp</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/dao/UserDAO.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/nbproject/build-impl.xml~</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/web/WEB-INF/web.xml</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/dao/RoleDAO.java</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/web/home.jsp</file>
+            <file>file:/D:/github/SE1940-Assignment/SE1940_assignment/src/java/dao/DivisionDAO.java</file>
         </group>
     </open-files>
 </project-private>

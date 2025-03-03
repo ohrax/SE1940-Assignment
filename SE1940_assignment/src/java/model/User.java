@@ -4,44 +4,27 @@
  */
 package model;
 
-import java.time.LocalDateTime;
-
 /**
  *
  * @author admin
  */
 public class User {
-
     private int userId;
     private String username;
-    private String fullname;
-    private String email;
     private String password;
-    private String status; //active, inactive
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-    private int directManagerId;
+    private int divisionId;
+    private int managerId;
+    private String roleName;
+    private String divisionName;
 
-    public enum StatusEnum {
-        ACTIVE("Active"), INACTIVE("Inactive");
-        private final String value;
-        StatusEnum(String value) { this.value = value; }
-        public String getValue() { return value; }
-    }
-
-    public User() {
-    }
-
-    public User(int userId, String username, String fullname, String email, String password, String status, LocalDateTime createdDate, LocalDateTime updatedDate, int directManagerId) {
+    public User(int userId, String username, String password, int divisionId, int managerId, String roleName, String divisionName) {
         this.userId = userId;
         this.username = username;
-        this.fullname = fullname;
-        this.email = email;
         this.password = password;
-        this.status = status;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
-        this.directManagerId = directManagerId;
+        this.divisionId = divisionId;
+        this.managerId = managerId;
+        this.roleName = roleName;
+        this.divisionName = divisionName;
     }
 
     public int getUserId() {
@@ -60,22 +43,6 @@ public class User {
         this.username = username;
     }
 
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -84,40 +51,37 @@ public class User {
         this.password = password;
     }
 
-    public String getStatus() {
-        return status;
+    public int getDivisionId() {
+        return divisionId;
     }
 
-    public void setStatus(String status) {
-        if ("Active".equals(status) || "Inactive".equals(status)) {
-            this.status = status;
-        } else {
-            throw new IllegalArgumentException("Status must be 'Active' or 'Inactive'");
-        }
+    public void setDivisionId(int divisionId) {
+        this.divisionId = divisionId;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public int getManagerId() {
+        return managerId;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setManagerId(int managerId) {
+        this.managerId = managerId;
     }
 
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
-    public int getDirectManagerId() {
-        return directManagerId;
+    public String getDivisionName() {
+        return divisionName;
     }
 
-    public void setDirectManagerId(int directManagerId) {
-        this.directManagerId = directManagerId;
+    public void setDivisionName(String divisionName) {
+        this.divisionName = divisionName;
     }
-
+    
+    
 }
