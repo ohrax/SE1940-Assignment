@@ -1,1 +1,4 @@
 /SE1940_assignment/dist/
+*.xsd
+*.class
+*.class
